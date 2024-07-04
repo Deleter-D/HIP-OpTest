@@ -1,11 +1,11 @@
+#include <hip/hip_fp16.h>
+
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "common/half.hpp"
-using half_float::half;
-using namespace half_float::literal;
+using half = __half;
 
 // 模板函数声明，用于读取张量数据
 template <typename T>
@@ -42,7 +42,7 @@ std::vector<half> LoadTensorFromFile(const std::string& file_path,
   }
 
   // 确保vector有足够的空间
-  std::vector<half> tensor_data(num_elements, 0.0_h);
+  std::vector<half> tensor_data(num_elements, 0);
 
   // 读取二进制数据到vector中
   file.read(reinterpret_cast<char*>(tensor_data.data()),

@@ -1,11 +1,12 @@
 #pragma once
 
+#include <hip/hip_fp16.h>
+
 #include <random>
 #include <type_traits>
 #include <vector>
 
-#include "common/half.hpp"
-using half_float::half;
+using half = __half;
 
 template <typename T>
 std::vector<T> generateRandomVector(
@@ -41,7 +42,7 @@ std::vector<half> generateRandomVector<half>(size_t length,
 
   for (size_t i = 0; i < length; ++i) {
     float tmp = dis(gen);
-    random_vector[i] = half_float::half_cast<half, float>(tmp);
+    random_vector[i] = static_cast<half>(tmp);
   }
 
   return random_vector;

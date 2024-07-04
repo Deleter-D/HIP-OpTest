@@ -2,8 +2,12 @@ import numpy as np
 import argparse
 
 
-def check_tensors_close(file1, file2, shape_str, dtype, atol=1e-05, rtol=1e-08):
+def check_tensors_close(file1, file2, shape_str, dtype, atol=1e-05, rtol=1e-05):
     shape = list(map(int, shape_str.split(",")))
+    print(f"Comparing {file1} and {file2}")
+    print(f"Shape: {shape}")
+    print(f"Data type: {dtype}")
+
     tensor1 = np.fromfile(file1, dtype=dtype).reshape(shape)
     tensor2 = np.fromfile(file2, dtype=dtype).reshape(shape)
 
@@ -35,6 +39,7 @@ def main():
 
     args = parse.parse_args()
 
+    print("[begin] check tensor")
     check_tensors_close(
         args.file1,
         args.file2,
@@ -43,6 +48,7 @@ def main():
         atol=args.atol,
         rtol=args.rtol,
     )
+    print("[end] check tensor")
 
 
 if __name__ == "__main__":

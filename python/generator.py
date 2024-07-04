@@ -34,7 +34,9 @@ def main():
     # 解析参数
     args = parser.parse_args()
 
+    print("[begin] generate tensor")
     generateTensorToFile(args.file_path, args.min, args.max, args.shape, args.dtype)
+    print("[end] generate tensor")
 
 
 if __name__ == "__main__":

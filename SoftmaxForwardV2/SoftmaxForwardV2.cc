@@ -1,3 +1,4 @@
+#include <hip/hip_fp16.h>
 #include <hip/hip_runtime.h>
 #include <hip/hip_runtime_api.h>
 #include <miopen/miopen.h>
@@ -7,11 +8,11 @@
 
 #include "common/file_helper.h"
 #include "common/generator.h"
-#include "common/half.hpp"
 #include "common/logging.h"
 
-using half_float::half;
-using namespace half_float::literal;
+// using half_float::half;
+using half = __half;
+// using namespace half_float::literal;
 
 #define CHECK_MIOPEN(msg) \
   CHECK_EQ(reinterpret_cast<miopenStatus_t>(msg), miopenStatusSuccess)
@@ -23,8 +24,8 @@ int main() {
   CHECK_MIOPEN(miopenCreate(&handle));
 
   // constance
-  using dtype = half;
-  auto miopen_type = miopenHalf;
+  using dtype = float;
+  auto miopen_type = miopenFloat;
   std::vector<int> dims{16, 100000, 1, 1};
   std::vector<int> strides{100000, 1, 1, 1};
   const int input_size =
@@ -32,7 +33,7 @@ int main() {
   const int output_size = input_size;
 
   // inputs
-  std::vector<dtype> input = LoadTensorFromFile<half>(
+  std::vector<dtype> input = LoadTensorFromFile<dtype>(
       "/work/MiOpen-OpTest/SoftmaxForwardV2/input.bin", input_size);
   dtype *d_in;
   hipMalloc(&d_in, input_size * sizeof(dtype));
@@ -42,7 +43,7 @@ int main() {
       desc, miopen_type, dims.size(), dims.data(), strides.data()));
 
   // outputs
-  std::vector<dtype> output(input_size, 0.0_h);
+  std::vector<dtype> output(input_size, 0);
   dtype *d_out;
   hipMalloc(&d_out, output_size * sizeof(dtype));
 
