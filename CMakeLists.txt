@@ -4,11 +4,6 @@ project(miopen_demo)
 
 message(STATUS "Building target TARGET_EXE=${TARGET_EXE}")
 
-# enable_language(HIP)
-set(CMAKE_HIP_COMPILER /opt/dtk-23.10.1/bin/hipcc)
-set(CMAKE_C_COMPILER ${CMAKE_HIP_COMPILER})
-set(CMAKE_CXX_COMPILER ${CMAKE_HIP_COMPILER})
-
 # envs
 if(DEFINED ENV{DTKROOT})
     set(DTK_DIR $ENV{DTKROOT})
@@ -22,6 +17,10 @@ else()
 endif()
 set(ROCM_DIR ${DTK_DIR})
 set(HIP_DIR ${ROCM_DIR}/hip)
+
+set(CMAKE_HIP_COMPILER ${HIP_DIR}/bin/hipcc)
+set(CMAKE_C_COMPILER ${CMAKE_HIP_COMPILER})
+set(CMAKE_CXX_COMPILER ${CMAKE_HIP_COMPILER})
 
 # compile options
 add_compile_options(-std=c++14)
